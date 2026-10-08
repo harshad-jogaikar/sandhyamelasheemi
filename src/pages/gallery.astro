@@ -31,11 +31,11 @@ import gallery from '@/data/gallery.json';
         {gallery.videos.map((v) => (
           <div class="stack vid">
             {v.embedUrl ? (
-              <iframe src={v.embedUrl} title={v.title} loading="lazy" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+              <iframe src={v.embedUrl} title={v.title} loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
             ) : (
               <Photo alt={v.title} note={`[VIDEO — ${v.title}]`} ratio="16 / 9" dark />
             )}
-            <span class="muted">{v.title}</span>
+            <span class="muted">{v.title}{v.source && <> · {v.source}</>}</span>
           </div>
         ))}
       </div>
