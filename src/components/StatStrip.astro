@@ -1,0 +1,21 @@
+---
+import site from '@/data/site.json';
+---
+<section class="band-gold" aria-label="Career in numbers">
+  <div class="wrap grid grid-4 strip">
+    {site.stats.map((s) => (
+      <div class="stat">
+        <span class="display value">{s.value}</span>
+        <span class="label">{s.label}<br /><span class="detail">{s.detail}</span></span>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  .strip { padding-top: 36px; padding-bottom: 36px; }
+  .stat { display: flex; flex-direction: column; gap: 4px; }
+  .value { font-size: clamp(40px, 4vw, 52px); }
+  .label { font-weight: 600; font-size: 15px; line-height: 1.35; }
+  .detail { font-weight: 400; }
+</style>

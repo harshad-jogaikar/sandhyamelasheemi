@@ -1,0 +1,32 @@
+[
+  {
+    "year": "[Year]",
+    "title": "Goa State champion",
+    "text": "Wins the state title as a young player. Age, event and venue to be added.",
+    "confirmed": false
+  },
+  {
+    "year": "[Year]",
+    "title": "Triple gold, Indian Masters Nationals, Jaipur",
+    "text": "Three titles at one Nationals, described by the Goa Badminton Association as historic.",
+    "confirmed": false
+  },
+  {
+    "year": "2021",
+    "title": "Bronze, BWF World Senior Championships, Huelva",
+    "text": "Women's doubles 35+ with Sangeeta Mari; quarter-finalist in singles. One of India's five medals at the event.",
+    "confirmed": true
+  },
+  {
+    "year": "2025",
+    "title": "Double gold, 47th Indian Masters Nationals, Mapusa",
+    "text": "Women's singles 40+ and women's doubles 40+. Seeded at the BWF World Senior Championships the same year.",
+    "confirmed": true
+  },
+  {
+    "year": "2026",
+    "title": "Double gold, 48th Indian Masters Nationals, Navelim",
+    "text": "Retains both 40+ titles in front of a home crowd.",
+    "confirmed": true
+  }
+]

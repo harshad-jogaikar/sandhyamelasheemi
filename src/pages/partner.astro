@@ -1,0 +1,153 @@
+---
+import Base from '@/layouts/Base.astro';
+import Photo from '@/components/Photo.astro';
+import EnquiryForm from '@/components/EnquiryForm.astro';
+import packages from '@/data/packages.json';
+
+const reasons = [
+  { n: '01', title: 'Proven, current results', text: 'A World Championship medal and double national golds in each of the last two seasons. Not a legacy story, a live one.' },
+  { n: '02', title: 'India on the world stage', text: 'Represents India at the BWF World Senior Championships every cycle. Your logo travels to Europe and Asia with the national flag.' },
+  { n: '03', title: 'A face Goa trusts', text: 'Former state champion, active coach and regular in Goan press. Strong fit for Goa-based brands, hospitality, health and fitness.' },
+];
+const reach = [
+  { value: '[N]', label: 'Instagram followers' },
+  { value: '[N]', label: 'Press features / yr' },
+  { value: '[N]', label: 'Tournaments / yr' },
+  { value: '[N]', label: 'Players coached' },
+];
+---
+<Base title="Partner with Sandhya" path="/partner" description="Sponsor Sandhya Melasheemi, India's top-ranked Masters badminton player: kit, season and event partnerships, audience reach and media kit.">
+  <section class="band-dark">
+    <div class="wrap section hero">
+      <div class="stack copy">
+        <p class="eyebrow eyebrow-gold">Partner with Sandhya</p>
+        <h1 class="display display-lg">Back a champion who delivers, season after season</h1>
+        <p class="lede muted">Your brand on the shirt of India's top-ranked Masters player as she competes at the World Senior Championships and defends her national titles.</p>
+        <div class="ctas">
+          <a href="#enquire" class="btn btn-gold">Start a conversation</a>
+          <a href="/media-kit" class="btn btn-ghost">View media kit</a>
+        </div>
+      </div>
+      <Photo alt="Match-day kit showing sponsor placement zones" note="[PHOTO — match-day kit, chest & sleeve sponsor zones highlighted]" ratio="4 / 3" dark class="hero-photo" loading="eager" />
+    </div>
+  </section>
+
+  <section class="wrap section stack why">
+    <div class="stack head">
+      <p class="eyebrow muted">Why Sandhya</p>
+      <h2 class="display display-md">Three reasons sponsors say yes</h2>
+    </div>
+    <div class="grid grid-3">
+      {reasons.map((r) => (
+        <div class="card reason stack">
+          <span class="display num">{r.n}</span>
+          <h3 class="display display-sm">{r.title}</h3>
+          <p class="muted">{r.text}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="band-paper-2">
+    <div class="wrap section reach">
+      <div class="stack copy">
+        <p class="eyebrow muted">Reach</p>
+        <h2 class="display display-md">Who she reaches</h2>
+        <p class="muted">Badminton players and parents, Masters-circuit athletes across India, fitness-minded adults 30–55, and the Goan community at home and abroad.</p>
+      </div>
+      <div class="grid grid-4 tiles">
+        {reach.map((r) => (
+          <div class="card tile">
+            <span class="display tile-value">{r.value}</span>
+            <span class="muted tile-label">{r.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap section stack packages" id="packages">
+    <div class="stack head">
+      <p class="eyebrow muted">Ways to partner</p>
+      <h2 class="display display-md">Pick a level, or build your own</h2>
+    </div>
+    <div class="grid grid-3">
+      {packages.map((p) => (
+        <div class={`pkg stack ${p.featured ? 'card-dark featured' : 'card'}`}>
+          {p.featured && <span class="badge">Most popular</span>}
+          <div>
+            <span class={`eyebrow ${p.featured ? 'eyebrow-gold' : 'muted'}`}>{p.tier}</span>
+            <h3 class="display pkg-title">{p.title}</h3>
+          </div>
+          <p class="muted">{p.text}</p>
+          <ul class="includes">
+            {p.includes.map((i) => (
+              <li>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M5 12l5 5L20 7" /></svg>
+                {i}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+    <p class="muted note">Pricing shared on request. CSR and sports-development partnerships welcome.</p>
+  </section>
+
+  <section class="band-dark" id="enquire">
+    <div class="wrap section bottom">
+      <div class="stack copy" id="kit">
+        <p class="eyebrow eyebrow-gold">Media kit</p>
+        <h2 class="display display-md">Everything your marketing team needs</h2>
+        <p class="muted">One page: bio, honours list, audience numbers, kit placement guide, photo library and contact details. Print it or save as PDF.</p>
+        <Photo alt="Media kit cover" note="[MEDIA KIT COVER PREVIEW]" ratio="16 / 10" dark />
+        <div><a href="/media-kit" class="btn btn-gold">Open media kit</a></div>
+      </div>
+      <EnquiryForm
+        id="sponsorship-enquiry"
+        title="Sponsorship enquiry"
+        subject="Sponsorship enquiry"
+        fields={[
+          { name: 'name', label: 'Your name', required: true, half: true },
+          { name: 'company', label: 'Company', placeholder: 'Brand or organisation', required: true, half: true },
+          { name: 'email', label: 'Work email', type: 'email', required: true },
+          { name: 'interest', label: "I'm interested in", type: 'select', options: [...packages.map((p) => p.formOption), 'CSR / sports development', 'Something else'] },
+          { name: 'message', label: 'Tell us about your brand and goals', type: 'textarea', placeholder: 'A few lines is plenty.' },
+        ]}
+      />
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero { display: flex; flex-wrap: wrap; gap: 48px; align-items: center; }
+  .copy { flex: 1 1 440px; min-width: 0; gap: 20px; }
+  .ctas { display: flex; flex-wrap: wrap; gap: 14px; }
+  .hero :global(.hero-photo) { flex: 1 1 380px; min-width: 0; border-radius: 12px; }
+  .why, .packages { gap: 36px; }
+  .head { gap: 10px; }
+  .reason { padding: 28px; gap: 12px; border-top: 4px solid var(--gold); }
+  .reason p { font-size: 15px; }
+  .num { font-size: 40px; }
+  .reach { display: flex; flex-wrap: wrap; gap: 40px; align-items: center; }
+  .reach .copy { flex: 1 1 380px; gap: 12px; }
+  .tiles { flex: 1 1 480px; gap: 16px; }
+  .tile { padding: 20px; text-align: center; display: flex; flex-direction: column; }
+  .tile-value { font-size: 34px; }
+  .tile-label { font-size: 13px; }
+  .pkg { padding: 32px; gap: 18px; position: relative; }
+  .pkg p { font-size: 15px; }
+  .pkg-title { font-size: 28px; font-weight: 700; margin-top: 6px; }
+  .badge { position: absolute; top: -14px; left: 32px; background: var(--gold); color: var(--ink); font-family: var(--font-display); font-weight: 700; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; padding: 6px 12px; border-radius: 999px; }
+  .includes { list-style: none; margin: auto 0 0; padding: 0; display: flex; flex-direction: column; gap: 10px; font-size: 15px; }
+  .includes li { display: flex; gap: 10px; align-items: flex-start; color: var(--gold-text); }
+  .includes li svg { flex: 0 0 auto; margin-top: 3px; }
+  .featured .includes li { color: var(--gold); }
+  .includes li { color: inherit; }
+  .includes li svg { color: var(--gold-text); }
+  .featured .includes li svg { color: var(--gold); }
+  .note { font-size: 14px; }
+  .bottom { display: flex; flex-wrap: wrap; gap: 56px; }
+  .bottom .copy { flex: 1 1 380px; }
+  .bottom :global(.enquiry) { flex: 1 1 440px; min-width: 0; }
+</style>

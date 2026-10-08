@@ -1,0 +1,54 @@
+---
+import Base from '@/layouts/Base.astro';
+import EnquiryForm from '@/components/EnquiryForm.astro';
+import site from '@/data/site.json';
+import { socialUrl } from '@/lib/format';
+
+const socials = [
+  { label: 'Instagram', url: socialUrl('instagram', site.social.instagram) },
+  { label: 'Facebook', url: socialUrl('facebook', site.social.facebook) },
+  { label: 'YouTube', url: socialUrl('youtube', site.social.youtube) },
+].filter((s) => s.url);
+---
+<Base title="Contact" path="/contact" description="Contact Sandhya Melasheemi for sponsorship, coaching, media and appearance enquiries.">
+  <section class="wrap section contact">
+    <div class="stack copy">
+      <p class="eyebrow muted">Contact</p>
+      <h1 class="display display-lg">Get in touch</h1>
+      <p class="lede muted">Sponsorship, coaching, media or an appearance: use the form or email directly. Replies within {site.contact.replyTime}.</p>
+      <dl class="details">
+        <div><dt class="eyebrow muted">Email</dt><dd><a href={`mailto:${site.contact.email}`}>{site.contact.email}</a></dd></div>
+        {site.contact.phone && <div><dt class="eyebrow muted">Phone</dt><dd><a href={`tel:${site.contact.phone}`}>{site.contact.phone}</a></dd></div>}
+        <div><dt class="eyebrow muted">Based in</dt><dd>{site.location}</dd></div>
+        {socials.length > 0 && (
+          <div><dt class="eyebrow muted">Follow</dt><dd>{socials.map((s, i) => <>{i > 0 && ' · '}<a href={s.url} rel="noopener" target="_blank">{s.label}</a></>)}</dd></div>
+        )}
+      </dl>
+      <div class="shortcuts stack">
+        <a href="/partner" class="arrow-link">Sponsorship enquiries</a>
+        <a href="/coaching#enquire" class="arrow-link">Coaching enquiries</a>
+        <a href="/media-kit" class="arrow-link">Media kit</a>
+      </div>
+    </div>
+    <EnquiryForm
+      id="general-enquiry"
+      title="Send a message"
+      subject="Website enquiry"
+      fields={[
+        { name: 'name', label: 'Your name', required: true, half: true },
+        { name: 'email', label: 'Email', type: 'email', required: true, half: true },
+        { name: 'topic', label: 'Topic', type: 'select', options: ['Sponsorship', 'Coaching', 'Media / interview', 'Appearance or event', 'Something else'] },
+        { name: 'message', label: 'Message', type: 'textarea', required: true },
+      ]}
+    />
+  </section>
+</Base>
+
+<style>
+  .contact { display: flex; flex-wrap: wrap; gap: 48px; align-items: flex-start; }
+  .copy { flex: 1 1 380px; min-width: 0; gap: 18px; }
+  .contact :global(.enquiry) { flex: 1 1 440px; min-width: 0; }
+  .details { margin: 8px 0 0; display: flex; flex-direction: column; gap: 14px; }
+  .details dd { margin: 4px 0 0; font-weight: 600; }
+  .shortcuts { gap: 8px; margin-top: 8px; }
+</style>

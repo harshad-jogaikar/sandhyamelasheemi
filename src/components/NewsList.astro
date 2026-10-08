@@ -1,0 +1,26 @@
+---
+import news from '@/data/news.json';
+import { formatMonthYear, sortByDateDesc } from '@/lib/format';
+
+interface Props { limit?: number; showSummary?: boolean }
+const { limit, showSummary = false } = Astro.props;
+const items = sortByDateDesc(news).slice(0, limit ?? news.length);
+---
+<div class={`grid ${showSummary ? 'grid-2' : 'grid-3'}`}>
+  {items.map((n) => (
+    <a href={n.url} class="card news stack" rel="noopener" target="_blank">
+      <span class="eyebrow muted">{n.outlet} · {formatMonthYear(n.date)}</span>
+      <span class="display display-sm">{n.title}</span>
+      {showSummary && <p class="muted summary">{n.summary}</p>}
+      <span class="read">Read on {n.outlet} ↗</span>
+    </a>
+  ))}
+</div>
+
+<style>
+  .news { padding: 24px; gap: 10px; text-decoration: none; color: var(--text); }
+  .news:hover { border-color: var(--gold); }
+  .news .display { font-size: 21px; }
+  .summary { font-size: 15px; }
+  .read { margin-top: auto; padding-top: 8px; font-size: 14px; font-weight: 600; color: var(--gold-text); }
+</style>

@@ -1,0 +1,70 @@
+---
+import site from '@/data/site.json';
+
+interface Props { path: string }
+const { path } = Astro.props;
+
+const links = [
+  { href: '/about', label: 'About' },
+  { href: '/honours', label: 'Honours' },
+  { href: '/coaching', label: 'Coaching' },
+  { href: '/gallery', label: 'Gallery' },
+  { href: '/news', label: 'News' },
+  { href: '/contact', label: 'Contact' },
+];
+const isActive = (href: string) => path === href || path.startsWith(`${href}/`);
+---
+<header class="site-header no-print">
+  <nav class="wrap nav" aria-label="Main">
+    <a href="/" class="brand display" aria-label={`${site.name} — home`}>{site.name}</a>
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-menu" data-menu-toggle>
+      <span class="visually-hidden">Menu</span>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+        <path class="icon-open" d="M3 6h18M3 12h18M3 18h18" />
+        <path class="icon-close" d="M5 5l14 14M19 5L5 19" />
+      </svg>
+    </button>
+    <div class="menu" id="site-menu" data-menu>
+      {links.map((l) => (
+        <a href={l.href} aria-current={isActive(l.href) ? 'page' : undefined}>{l.label}</a>
+      ))}
+      <a href="/partner" class="btn btn-ink btn-sm" aria-current={isActive('/partner') ? 'page' : undefined}>Partner with Sandhya</a>
+    </div>
+  </nav>
+</header>
+
+<style>
+  .site-header { background: var(--paper); border-bottom: 1px solid var(--line); position: relative; z-index: 20; }
+  .nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 72px; flex-wrap: wrap; }
+  .brand { font-size: 18px; letter-spacing: 0.02em; text-transform: uppercase; color: var(--ink); text-decoration: none; }
+  .menu { display: flex; flex-wrap: wrap; gap: 28px; align-items: center; }
+  .menu a { color: var(--ink); text-decoration: none; font-weight: 500; font-size: 15px; }
+  .menu a:hover { color: var(--gold-text); }
+  .menu a[aria-current='page']:not(.btn) { color: var(--gold-text); font-weight: 600; }
+  .menu a.btn { color: var(--white); }
+  .menu-btn { display: none; width: 44px; height: 44px; border: 0; background: transparent; color: var(--ink); cursor: pointer; align-items: center; justify-content: center; }
+  .icon-close { display: none; }
+  .menu-btn[aria-expanded='true'] .icon-open { display: none; }
+  .menu-btn[aria-expanded='true'] .icon-close { display: block; }
+
+  @media (max-width: 900px) {
+    .menu-btn { display: flex; }
+    .menu { display: none; flex-direction: column; align-items: stretch; width: 100%; gap: 0; padding: 8px 0 20px; border-top: 1px solid var(--line); }
+    .menu[data-open] { display: flex; }
+    .menu a { padding: 14px 0; font-size: 17px; border-bottom: 1px solid var(--line); }
+    .menu a.btn { margin-top: 16px; border-bottom: 0; }
+  }
+</style>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const menu = document.querySelector<HTMLElement>('[data-menu]');
+  if (toggle && menu) {
+    toggle.addEventListener('click', () => {
+      const open = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', String(!open));
+      if (open) menu.removeAttribute('data-open');
+      else menu.setAttribute('data-open', '');
+    });
+  }
+</script>

@@ -1,0 +1,22 @@
+---
+import Base from '@/layouts/Base.astro';
+import NewsList from '@/components/NewsList.astro';
+import site from '@/data/site.json';
+---
+<Base title="News & Press" path="/news" description="Press coverage of Sandhya Melasheemi: national titles, World Senior Championships medals and Goan badminton news.">
+  <section class="wrap section stack">
+    <div class="stack head">
+      <p class="eyebrow muted">News &amp; press</p>
+      <h1 class="display display-lg">In the news</h1>
+      <p class="lede muted">Coverage from the Goan and national press. For interviews and media requests, write to <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>.</p>
+    </div>
+    <div class="list">
+      <NewsList showSummary />
+    </div>
+  </section>
+</Base>
+
+<style>
+  .head { gap: 12px; }
+  .list { margin-top: 32px; }
+</style>

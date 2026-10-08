@@ -1,0 +1,35 @@
+---
+/**
+ * Image slot. Renders a real <img> when `src` is given, otherwise a labelled
+ * placeholder so the layout is complete while photos are being collected.
+ * Swap in real photos by passing `src="/images/<file>"` and `alt`.
+ */
+interface Props {
+  src?: string;
+  alt: string;
+  /** Shown inside the placeholder when there is no src yet. */
+  note?: string;
+  ratio?: string;
+  dark?: boolean;
+  class?: string;
+  loading?: 'lazy' | 'eager';
+}
+const { src, alt, note, ratio = '4 / 3', dark = false, class: className = '', loading = 'lazy' } = Astro.props;
+---
+{src ? (
+  <img src={src} alt={alt} class={`photo ${className}`} style={`aspect-ratio:${ratio}`} loading={loading} decoding="async" />
+) : (
+  <div class={`photo placeholder ${dark ? 'dark' : ''} ${className}`} style={`aspect-ratio:${ratio}`} role="img" aria-label={alt}>
+    <span>{note ?? alt}</span>
+  </div>
+)}
+
+<style>
+  .photo { width: 100%; object-fit: cover; border-radius: var(--radius); }
+  .placeholder {
+    display: flex; align-items: center; justify-content: center; text-align: center;
+    padding: 16px; font-size: 13px; font-weight: 500; color: #4a4f5a;
+    background: repeating-linear-gradient(135deg, #d8d1c2 0 10px, #cfc7b6 10px 20px);
+  }
+  .placeholder.dark { color: var(--text-on-dark); background: repeating-linear-gradient(135deg, #1e2c47 0 10px, #24345a 10px 20px); }
+</style>

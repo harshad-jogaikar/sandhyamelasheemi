@@ -1,0 +1,108 @@
+---
+/** Printable one-page media kit. Visitors use the browser's Print → Save as PDF. */
+import Base from '@/layouts/Base.astro';
+import Photo from '@/components/Photo.astro';
+import site from '@/data/site.json';
+import honoursData from '@/data/honours.json';
+import { assertValidHonours } from '@/lib/validate';
+import { LEVEL_LABELS, describeHonour, displayYear, sortHonours } from '@/lib/honours';
+
+const honours = sortHonours(assertValidHonours(honoursData)).filter((h) => h.confirmed);
+const placements = [
+  { zone: 'Chest', note: 'Principal partner · match & training kit' },
+  { zone: 'Sleeve', note: 'Supporter · match kit' },
+  { zone: 'Shorts / skirt', note: 'Supporter · match kit' },
+  { zone: 'Racket bag & cap', note: 'Equipment partner' },
+];
+---
+<Base title="Media Kit" path="/media-kit" bare description={`Media kit for ${site.name}: bio, honours, audience and partnership contact.`}>
+  <div class="kit">
+    <div class="toolbar no-print">
+      <a href="/partner" class="arrow-link back">Back to Partner page</a>
+      <button type="button" class="btn btn-ink btn-sm" onclick="window.print()">Print / save as PDF</button>
+    </div>
+
+    <header class="kit-head">
+      <div class="stack">
+        <p class="eyebrow eyebrow-gold">Media kit · {new Date().getFullYear()}</p>
+        <h1 class="display display-lg">{site.name}</h1>
+        <p class="lede">BWF World Senior Championships bronze medallist · Indian Masters national champion · {site.location}</p>
+      </div>
+      <Photo alt={`Portrait of ${site.name}`} note="[PORTRAIT]" ratio="4 / 5" dark class="kit-photo" loading="eager" />
+    </header>
+
+    <section class="kit-grid">
+      <div class="stack block">
+        <h2 class="eyebrow">Biography</h2>
+        <p>
+          Sandhya Melasheemi is a Goan badminton player who won the state championship as a young player and never stopped competing. Today she is India's leading Masters player, with a BWF World Senior Championships bronze medal (Huelva, 2021) and double golds at the Indian Masters Nationals in both 2025 and 2026. She coaches juniors and adults in Goa and represents India on the World Seniors circuit.
+        </p>
+      </div>
+      <div class="stack block">
+        <h2 class="eyebrow">In numbers</h2>
+        <ul class="nums">
+          {site.stats.map((s) => <li><strong>{s.value}</strong> {s.label} <span class="muted">· {s.detail}</span></li>)}
+        </ul>
+      </div>
+    </section>
+
+    <section class="stack block">
+      <h2 class="eyebrow">Honours (confirmed)</h2>
+      <table>
+        <thead><tr><th>Year</th><th>Event</th><th>Category</th><th>Result</th><th>Partner / final</th></tr></thead>
+        <tbody>
+          {honours.map((h) => (
+            <tr><td>{displayYear(h)}</td><td>{LEVEL_LABELS[h.level]} · {h.event}{h.venue ? `, ${h.venue}` : ''}</td><td>{h.category}</td><td><strong>{h.result}</strong></td><td>{describeHonour(h)}</td></tr>
+          ))}
+        </tbody>
+      </table>
+    </section>
+
+    <section class="kit-grid">
+      <div class="stack block">
+        <h2 class="eyebrow">Audience</h2>
+        <ul class="plain">
+          <li>Badminton players and parents across India</li>
+          <li>Masters-circuit athletes (35+) nationally</li>
+          <li>Fitness-minded adults 30–55</li>
+          <li>The Goan community at home and abroad</li>
+          <li class="muted">Social reach: [Instagram N] · [Facebook N] · [YouTube N]</li>
+        </ul>
+      </div>
+      <div class="stack block">
+        <h2 class="eyebrow">Kit placement</h2>
+        <ul class="plain">
+          {placements.map((p) => <li><strong>{p.zone}</strong> <span class="muted">— {p.note}</span></li>)}
+        </ul>
+      </div>
+    </section>
+
+    <footer class="kit-foot">
+      <div><strong>Partnership enquiries</strong><br /><a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>{site.contact.phone && <> · {site.contact.phone}</>}</div>
+      <div class="muted">{Astro.site?.host} · Results as reported by BWF and the Badminton Association of India.</div>
+    </footer>
+  </div>
+</Base>
+
+<style>
+  .kit { max-width: 900px; margin: 0 auto; padding: 32px var(--gutter) 64px; display: flex; flex-direction: column; gap: 36px; }
+  .toolbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .kit-head { display: flex; flex-wrap: wrap; gap: 32px; align-items: center; justify-content: space-between; background: var(--ink); color: var(--white); border-radius: 12px; padding: 36px; }
+  .kit-head .stack { gap: 12px; flex: 1 1 400px; }
+  .kit-head .lede { color: var(--text-on-dark); }
+  .kit-head :global(.kit-photo) { flex: 0 0 200px; }
+  .kit-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; }
+  .block { gap: 12px; }
+  .block h2 { color: var(--gold-text); border-bottom: 2px solid var(--gold); padding-bottom: 8px; }
+  .nums, .plain { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 15px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th { text-align: left; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); padding: 8px; border-bottom: 1px solid var(--ink); }
+  td { padding: 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .kit-foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; border-top: 2px solid var(--ink); padding-top: 20px; font-size: 14px; }
+  @media (max-width: 640px) { .kit-grid { grid-template-columns: minmax(0, 1fr); } }
+  @media print {
+    .kit { padding: 0; gap: 20px; font-size: 12pt; }
+    .kit-head { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    a { color: inherit; text-decoration: none; }
+  }
+</style>

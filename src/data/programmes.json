@@ -1,0 +1,30 @@
+[
+  {
+    "id": "juniors",
+    "eyebrow": "Juniors",
+    "title": "Private & small group",
+    "text": "Ages 8 to 18. Fundamentals through to tournament preparation. Weekly slots in Goa.",
+    "formOption": "A junior player"
+  },
+  {
+    "id": "adults",
+    "eyebrow": "Adults & Masters",
+    "title": "Competitive coaching",
+    "text": "For club players and 35+ competitors who want to win ranking events. Tactics, fitness, scheduling.",
+    "formOption": "Myself (adult / Masters)"
+  },
+  {
+    "id": "academies",
+    "eyebrow": "Academies & schools",
+    "title": "Guest coaching camps",
+    "text": "Two to five day camps or termly visits. Curriculum shared in advance; progress notes for your coaches.",
+    "formOption": "An academy, school or club"
+  },
+  {
+    "id": "corporate",
+    "eyebrow": "Corporate",
+    "title": "Clinics & team days",
+    "text": "Half-day badminton events for employees, with a Q&A on performing under pressure.",
+    "formOption": "A corporate group"
+  }
+]

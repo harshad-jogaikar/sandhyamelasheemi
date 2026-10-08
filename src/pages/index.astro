@@ -1,0 +1,126 @@
+---
+import Base from '@/layouts/Base.astro';
+import Photo from '@/components/Photo.astro';
+import StatStrip from '@/components/StatStrip.astro';
+import HighlightCard from '@/components/HighlightCard.astro';
+import NewsList from '@/components/NewsList.astro';
+import site from '@/data/site.json';
+import honoursData from '@/data/honours.json';
+import { assertValidHonours } from '@/lib/validate';
+import { highlights } from '@/lib/honours';
+
+const honours = assertValidHonours(honoursData);
+const top = highlights(honours);
+const photoNotes: Record<string, string> = {
+  '2021-worlds-wd35': '[PHOTO — podium, Huelva 2021]',
+  '2026-nationals-ws40': '[PHOTO — trophy lift, Navelim 2026]',
+  '2025-nationals-ws40': '[PHOTO — on court, Mapusa 2025]',
+};
+const partnerWays = [
+  { title: 'Kit', text: 'Logo on match & training apparel' },
+  { title: 'Travel', text: 'World Seniors & national circuit' },
+  { title: 'Events', text: 'Clinics, appearances, corporate days' },
+  { title: 'Content', text: 'Social features & brand stories' },
+];
+---
+<Base title="Home" path="/">
+  <section class="band-dark hero">
+    <div class="wrap hero-inner">
+      <div class="stack copy">
+        <p class="eyebrow eyebrow-gold">World Senior Championships medallist · Indian Masters National Champion</p>
+        <h1 class="display display-xl">Still winning<br />for India.</h1>
+        <p class="lede muted">
+          Goa-born badminton champion. BWF World Senior bronze medallist and reigning Indian Masters national champion in women's singles and doubles.
+        </p>
+        <div class="ctas">
+          <a href="/partner" class="btn btn-gold">Partner with Sandhya</a>
+          <a href="/coaching" class="btn btn-ghost">Coaching &amp; clinics</a>
+        </div>
+      </div>
+      <div class="art">
+        <Photo alt={`${site.name} mid-smash on court`} note="[HERO PHOTO — full-length action shot, mid-smash, dark court background]" ratio="4 / 5" dark loading="eager" />
+      </div>
+    </div>
+  </section>
+
+  <StatStrip />
+
+  <section class="wrap section stack highlights">
+    <div class="section-head">
+      <div class="stack">
+        <p class="eyebrow muted">Career highlights</p>
+        <h2 class="display display-md">Medals that made headlines</h2>
+      </div>
+      <a href="/honours" class="arrow-link">See all honours</a>
+    </div>
+    <div class="grid grid-3">
+      {top.map((h) => <HighlightCard honour={h} photoNote={photoNotes[h.id]} />)}
+    </div>
+  </section>
+
+  <section class="band-dark">
+    <div class="wrap section partner">
+      <div class="stack copy">
+        <p class="eyebrow eyebrow-gold">For brands &amp; sponsors</p>
+        <h2 class="display display-md">A champion with a story your audience will back</h2>
+        <p class="lede muted">
+          Sandhya competes for India every season, trains and coaches in Goa, and reaches badminton families, fitness-minded adults and the Goan community. Partner on kit, travel, events or content.
+        </p>
+        <div class="ctas">
+          <a href="/partner" class="btn btn-gold">See partnership options</a>
+          <a href="/media-kit" class="btn btn-ghost">View media kit</a>
+        </div>
+      </div>
+      <div class="grid grid-2 ways">
+        {partnerWays.map((w) => (
+          <div class="card-dark way stack">
+            <span class="display way-title">{w.title}</span>
+            <span class="muted">{w.text}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap section coaching">
+    <Photo alt="Sandhya coaching a junior player" note="[PHOTO — Sandhya coaching a junior, feeding shuttles]" ratio="3 / 2" class="coach-photo" />
+    <div class="stack copy">
+      <p class="eyebrow muted">Coaching &amp; clinics</p>
+      <h2 class="display display-md">Learn from a national champion</h2>
+      <p class="lede muted">Private sessions, group clinics and camps for juniors and adults in Goa, plus guest coaching for academies, schools and clubs across India.</p>
+      <div><a href="/coaching" class="btn btn-ink">Explore coaching</a></div>
+    </div>
+  </section>
+
+  <section class="band-paper-2" id="news">
+    <div class="wrap section stack news">
+      <div class="section-head">
+        <h2 class="display display-md">In the news</h2>
+        <a href="/news" class="arrow-link">All press</a>
+      </div>
+      <NewsList limit={3} />
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero-inner { display: flex; flex-wrap: wrap; gap: 48px; align-items: center; padding-top: 56px; padding-bottom: 64px; }
+  .copy { flex: 1 1 440px; min-width: 0; gap: 24px; }
+  .ctas { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 8px; }
+  .art { flex: 1 1 380px; min-width: 0; display: flex; justify-content: flex-end; }
+  .art :global(.photo) { max-width: 520px; border-radius: 12px; }
+  .highlights { gap: 40px; }
+  .partner { display: flex; flex-wrap: wrap; gap: 48px; align-items: center; }
+  .ways { flex: 1 1 360px; min-width: 0; gap: 16px; }
+  .way { padding: 22px; gap: 6px; }
+  .way-title { font-size: 30px; color: var(--gold); }
+  .way .muted { font-size: 14px; }
+  .coaching { display: flex; flex-wrap: wrap; gap: 48px; align-items: center; }
+  .coaching :global(.coach-photo) { flex: 1 1 400px; min-width: 0; border-radius: 12px; }
+  .coaching .copy { gap: 18px; }
+  .news { gap: 32px; }
+  @media (max-width: 720px) {
+    .hero-inner { padding-top: 32px; padding-bottom: 40px; }
+    .art { order: -1; }
+  }
+</style>

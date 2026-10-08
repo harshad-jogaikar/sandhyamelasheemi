@@ -1,0 +1,117 @@
+---
+import Base from '@/layouts/Base.astro';
+import site from '@/data/site.json';
+import honoursData from '@/data/honours.json';
+import { assertValidHonours } from '@/lib/validate';
+import { HONOUR_LEVELS, LEVEL_LABELS, describeHonour, displayYear, sortHonours, summarise } from '@/lib/honours';
+
+const honours = sortHonours(assertValidHonours(honoursData));
+const summary = summarise(honours);
+const tiles = [
+  { value: String(summary.bronze), label: 'World bronze' },
+  { value: site.stats[1].value, label: 'National Masters titles' },
+  { value: '[N]', label: 'State titles' },
+];
+---
+<Base title="Honours" path="/honours" description="Every medal on the record: Sandhya Melasheemi's world, national and state badminton results with scores, partners and sources.">
+  <section class="band-dark">
+    <div class="wrap section head">
+      <div class="stack copy">
+        <p class="eyebrow eyebrow-gold">Honours</p>
+        <h1 class="display display-lg">Every medal, on the record</h1>
+        <p class="lede muted">World, national and state results, with scores and partners where published. Sources linked for sponsors and media.</p>
+      </div>
+      <div class="grid grid-3 tiles">
+        {tiles.map((t) => (
+          <div class="card-dark tile">
+            <span class="display tile-value">{t.value}</span>
+            <span class="muted tile-label">{t.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap section stack results">
+    <div class="filters" role="group" aria-label="Filter honours by level">
+      <button type="button" class="chip" data-level="all" aria-pressed="true">All</button>
+      {HONOUR_LEVELS.map((l) => (
+        <button type="button" class="chip" data-level={l} aria-pressed="false">{LEVEL_LABELS[l]}</button>
+      ))}
+      <span class="count muted" data-count aria-live="polite"></span>
+    </div>
+
+    <div class="table-wrap card">
+      <table>
+        <thead>
+          <tr><th scope="col">Year</th><th scope="col">Event</th><th scope="col">Category</th><th scope="col">Result</th><th scope="col">Partner / Final</th><th scope="col">Source</th></tr>
+        </thead>
+        <tbody>
+          {honours.map((h) => (
+            <tr data-level={h.level} class={h.medal === 'bronze' ? 'row-bronze' : ''}>
+              <td><strong class={h.confirmed ? '' : 'unconfirmed'}>{displayYear(h)}</strong></td>
+              <td>{h.event}{h.venue ? `, ${h.venue}` : ''}</td>
+              <td>{h.category}</td>
+              <td>
+                <span class="medal">
+                  {h.medal && <span class={`m m-${h.medal}`} aria-hidden="true"></span>}
+                  {h.result}
+                </span>
+              </td>
+              <td class={h.confirmed ? '' : 'unconfirmed'}>{describeHonour(h)}</td>
+              <td>{h.source ? <a href={h.source.url} rel="noopener" target="_blank">{h.source.label}</a> : '—'}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="muted note">Entries in italics are awaiting confirmation of year or details. National ranking tournament medals and team events for India will be added as they are confirmed.</p>
+  </section>
+</Base>
+
+<style>
+  .head { display: flex; flex-wrap: wrap; gap: 40px; align-items: flex-end; justify-content: space-between; }
+  .copy { flex: 1 1 480px; gap: 14px; }
+  .tiles { flex: 0 1 420px; gap: 12px; }
+  .tile { padding: 18px; text-align: center; display: flex; flex-direction: column; }
+  .tile-value { font-size: 40px; color: var(--gold); }
+  .tile-label { font-size: 13px; }
+  @media (max-width: 600px) { .tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .results { gap: 28px; padding-top: 56px; }
+  .filters { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .chip { min-height: 44px; padding: 0 20px; border-radius: 999px; border: 2px solid var(--ink); background: transparent; font-family: var(--font-display); font-weight: 700; font-size: 14px; color: var(--ink); cursor: pointer; }
+  .chip[aria-pressed='true'] { background: var(--ink); color: var(--white); }
+  .count { margin-left: auto; font-size: 14px; }
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 15px; min-width: 760px; }
+  th { text-align: left; font-family: var(--font-display); font-weight: 700; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); padding: 12px 16px; border-bottom: 2px solid var(--ink); }
+  td { padding: 16px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  tr[hidden] { display: none; }
+  .row-bronze { background: #fbf6e8; }
+  .medal { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; white-space: nowrap; }
+  .m { width: 14px; height: 14px; border-radius: 50%; display: inline-block; }
+  .m-gold { background: var(--gold); }
+  .m-silver { background: #a8a9ad; }
+  .m-bronze { background: var(--bronze); }
+  .note { font-size: 14px; }
+</style>
+
+<script>
+  const chips = document.querySelectorAll<HTMLButtonElement>('.chip[data-level]');
+  const rows = document.querySelectorAll<HTMLTableRowElement>('tbody tr[data-level]');
+  const count = document.querySelector<HTMLElement>('[data-count]');
+
+  function apply(level: string): void {
+    let visible = 0;
+    rows.forEach((row) => {
+      const match = level === 'all' || row.dataset.level === level;
+      row.hidden = !match;
+      if (match) visible += 1;
+    });
+    chips.forEach((c) => c.setAttribute('aria-pressed', String(c.dataset.level === level)));
+    if (count) count.textContent = `${visible} ${visible === 1 ? 'result' : 'results'}`;
+  }
+
+  chips.forEach((chip) => chip.addEventListener('click', () => apply(chip.dataset.level ?? 'all')));
+  apply('all');
+</script>

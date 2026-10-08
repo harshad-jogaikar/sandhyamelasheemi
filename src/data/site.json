@@ -1,0 +1,33 @@
+{
+  "name": "Sandhya Melasheemi",
+  "shortName": "Sandhya",
+  "tagline": "Still winning for India.",
+  "description": "Official website of Sandhya Melasheemi, Goa-born badminton champion, BWF World Senior Championships bronze medallist and reigning Indian Masters national champion in women's singles and doubles.",
+  "location": "Goa, India",
+  "sport": "Badminton",
+  "contact": {
+    "email": "hello@sandhyamelasheemi.com",
+    "phone": "",
+    "replyTime": "two working days"
+  },
+  "social": {
+    "instagram": "",
+    "facebook": "",
+    "youtube": ""
+  },
+  "forms": {
+    "endpoint": ""
+  },
+  "credentials": [
+    "BWF World Senior Championships bronze medallist (2021)",
+    "Indian Masters national champion, singles and doubles, 2025 and 2026",
+    "Former Goa State champion",
+    "Ranked India's top Masters player by the Goa Badminton Association"
+  ],
+  "stats": [
+    { "value": "1", "label": "World Championship medal", "detail": "Bronze · Huelva, Spain 2021" },
+    { "value": "7+", "label": "National Masters titles", "detail": "Singles & doubles, 2021–2026" },
+    { "value": "2×", "label": "Double crown at Nationals", "detail": "2025 Mapusa · 2026 Navelim" },
+    { "value": "#1", "label": "Masters player in India", "detail": "Former Goa State champion" }
+  ]
+}

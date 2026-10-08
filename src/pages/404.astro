@@ -1,0 +1,19 @@
+---
+import Base from '@/layouts/Base.astro';
+---
+<Base title="Page not found" path="/404">
+  <section class="wrap section stack nf">
+    <p class="eyebrow muted">404</p>
+    <h1 class="display display-lg">Out of bounds</h1>
+    <p class="lede muted">That page doesn't exist. Try the home page or the honours list.</p>
+    <div class="ctas">
+      <a href="/" class="btn btn-ink">Home</a>
+      <a href="/honours" class="btn btn-gold">Honours</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .nf { gap: 18px; min-height: 50vh; justify-content: center; }
+  .ctas { display: flex; gap: 14px; flex-wrap: wrap; }
+</style>

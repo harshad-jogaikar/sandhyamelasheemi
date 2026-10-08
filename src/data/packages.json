@@ -1,0 +1,34 @@
+[
+  {
+    "id": "supporter",
+    "tier": "Supporter",
+    "title": "Equipment & kit",
+    "text": "Rackets, shoes, shuttles, apparel. Product seeding with on-court use and social mentions.",
+    "featured": false,
+    "includes": ["Sleeve logo placement", "Monthly social feature", "Logo on this website"],
+    "formOption": "Equipment & kit"
+  },
+  {
+    "id": "principal",
+    "tier": "Principal",
+    "title": "Season partner",
+    "text": "Fund a full season of national and international travel. Chest logo and first mention everywhere.",
+    "featured": true,
+    "includes": [
+      "Chest logo, match & training kit",
+      "Named in all press & interviews",
+      "Two brand appearances a year",
+      "Co-branded content series"
+    ],
+    "formOption": "Season partnership"
+  },
+  {
+    "id": "event",
+    "tier": "Event",
+    "title": "Clinics & appearances",
+    "text": "Corporate badminton days, school visits, product launches and masterclasses with a national champion.",
+    "featured": false,
+    "includes": ["Half or full-day formats", "Photo & video rights", "Goa and travel options"],
+    "formOption": "Event or appearance"
+  }
+]

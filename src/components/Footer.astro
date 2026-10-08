@@ -1,0 +1,61 @@
+---
+import site from '@/data/site.json';
+import { socialUrl } from '@/lib/format';
+
+const year = new Date().getFullYear();
+const socials = [
+  { label: 'Instagram', url: socialUrl('instagram', site.social.instagram) },
+  { label: 'Facebook', url: socialUrl('facebook', site.social.facebook) },
+  { label: 'YouTube', url: socialUrl('youtube', site.social.youtube) },
+];
+const pages = [
+  { href: '/about', label: 'About' },
+  { href: '/honours', label: 'Honours' },
+  { href: '/coaching', label: 'Coaching' },
+  { href: '/partner', label: 'Partner' },
+  { href: '/gallery', label: 'Gallery' },
+  { href: '/news', label: 'News' },
+];
+---
+<footer class="footer band-dark no-print" id="contact">
+  <div class="wrap stack">
+    <div class="cols">
+      <div class="stack about">
+        <span class="display brand">{site.name}</span>
+        <p>
+          {site.sport} · {site.location}. For sponsorship, coaching and media enquiries, write to
+          <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>.
+        </p>
+      </div>
+      <div class="stack links">
+        <span class="eyebrow eyebrow-gold">Pages</span>
+        {pages.map((p) => <a href={p.href}>{p.label}</a>)}
+      </div>
+      <div class="stack links">
+        <span class="eyebrow eyebrow-gold">Follow</span>
+        {socials.map((s) =>
+          s.url ? (
+            <a href={s.url} rel="noopener" target="_blank">{s.label}</a>
+          ) : (
+            <span class="pending">{s.label} <small>(link coming soon)</small></span>
+          ),
+        )}
+      </div>
+    </div>
+    <p class="legal">© {year} {site.name}. Results as reported by BWF and the Badminton Association of India.</p>
+  </div>
+</footer>
+
+<style>
+  .footer .stack { gap: 40px; padding-top: 64px; padding-bottom: 40px; }
+  .cols { display: flex; flex-wrap: wrap; gap: 40px; justify-content: space-between; }
+  .about { flex: 1 1 320px; gap: 12px !important; padding: 0 !important; }
+  .about p { font-size: 15px; max-width: 380px; color: var(--text-on-dark); }
+  .about a { color: var(--gold); }
+  .brand { font-size: 22px; color: var(--white); text-transform: uppercase; letter-spacing: 0.02em; }
+  .links { gap: 8px !important; padding: 0 !important; font-size: 15px; }
+  .links a { color: var(--text-on-dark); text-decoration: none; }
+  .links a:hover { color: var(--gold); }
+  .pending { color: var(--text-on-dark-muted); }
+  .legal { font-size: 13px; color: var(--text-on-dark-muted); border-top: 1px solid var(--line-dark); padding-top: 20px; }
+</style>

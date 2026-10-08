@@ -1,0 +1,100 @@
+---
+import Base from '@/layouts/Base.astro';
+import Photo from '@/components/Photo.astro';
+import site from '@/data/site.json';
+import timeline from '@/data/timeline.json';
+
+const facts = [
+  { label: 'Home', value: site.location },
+  { label: 'Events', value: "Women's singles & doubles" },
+  { label: 'Category', value: 'Masters 40+ (formerly 35+)' },
+  { label: 'Plays', value: '[Right / left handed]' },
+];
+---
+<Base title="About" path="/about" description="The story of Sandhya Melasheemi: from Goa State champion to a BWF World Senior Championships podium and back-to-back Indian Masters national titles.">
+  <section class="wrap section intro">
+    <Photo alt={`Portrait of ${site.name}`} note="[PORTRAIT — editorial, natural light, racket in hand]" ratio="4 / 5" class="portrait" loading="eager" />
+    <div class="stack copy">
+      <p class="eyebrow muted">About Sandhya</p>
+      <h1 class="display display-lg">From Goa's state courts to a World Championship podium</h1>
+      <p class="lede">
+        Sandhya Melasheemi is a Goan badminton player who won the state championship as a young player and never stopped competing. Today she is India's leading Masters player, with a BWF World Senior Championships bronze medal and back-to-back double golds at the Indian Masters Nationals.
+      </p>
+      <p class="muted placeholder-copy">
+        [2–3 paragraphs from Sandhya: where she grew up, how she started playing, who coached her, what keeps her competing, life off court — family, profession, community work.]
+      </p>
+      <dl class="grid grid-2 facts">
+        {facts.map((f) => (
+          <div class="fact">
+            <dt class="eyebrow muted">{f.label}</dt>
+            <dd>{f.value}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+
+  <section class="band-dark">
+    <div class="wrap section stack journey">
+      <div class="stack head">
+        <p class="eyebrow eyebrow-gold">The journey</p>
+        <h2 class="display display-md">Milestones</h2>
+      </div>
+      <ol class="timeline">
+        {timeline.map((t) => (
+          <li class="tl-item">
+            <span class="dot" aria-hidden="true"></span>
+            <div class="stack tl-body">
+              <span class="eyebrow eyebrow-gold">{t.year}</span>
+              <strong class="tl-title">{t.title}</strong>
+              <span class={`muted ${t.confirmed ? '' : 'tl-unconfirmed'}`}>{t.text}</span>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="wrap section off-court">
+    <div class="stack copy">
+      <p class="eyebrow muted">Off the court</p>
+      <h2 class="display display-md">What drives her</h2>
+      <p class="lede muted">
+        [Short section on training routine, giving back to Goan badminton, mentoring juniors, and goals for the next World Seniors cycle. One or two quotes from Sandhya in her own words.]
+      </p>
+      <div class="ctas">
+        <a href="/partner" class="btn btn-gold">Partner with Sandhya</a>
+        <a href="/honours" class="btn btn-ink">Full honours list</a>
+      </div>
+    </div>
+    <div class="grid grid-2 mosaic">
+      <Photo alt="Sandhya in training" note="[PHOTO — training]" ratio="1 / 1" />
+      <Photo alt="Sandhya with junior players" note="[PHOTO — with juniors]" ratio="1 / 1" />
+      <Photo alt="Sandhya in Goa" note="[PHOTO — Goa]" ratio="1 / 1" />
+      <Photo alt="Sandhya with the Indian team" note="[PHOTO — team India]" ratio="1 / 1" />
+    </div>
+  </section>
+</Base>
+
+<style>
+  .intro { display: flex; flex-wrap: wrap; gap: 56px; align-items: flex-start; }
+  .intro :global(.portrait) { flex: 0 1 440px; min-width: 260px; border-radius: 12px; }
+  .copy { flex: 1 1 440px; min-width: 0; gap: 22px; }
+  .facts { gap: 16px; margin: 8px 0 0; }
+  .fact { border-top: 3px solid var(--gold); padding-top: 12px; }
+  .fact dd { margin: 4px 0 0; font-weight: 700; }
+  .journey { gap: 40px; }
+  .head { gap: 10px; }
+  .timeline { list-style: none; margin: 0; padding: 0 0 0 7px; border-left: 2px solid var(--ink-3); display: flex; flex-direction: column; }
+  .tl-item { display: flex; gap: 28px; margin-left: -9px; padding-bottom: 36px; }
+  .tl-item:last-child { padding-bottom: 0; }
+  .dot { width: 16px; height: 16px; border-radius: 50%; background: var(--gold); border: 3px solid var(--ink); flex: 0 0 auto; margin-top: 6px; }
+  .tl-body { gap: 4px; }
+  .tl-title { font-size: 20px; }
+  .tl-unconfirmed { font-style: italic; }
+  .off-court { display: flex; flex-wrap: wrap; gap: 48px; align-items: center; }
+  .off-court .copy { gap: 18px; }
+  .ctas { display: flex; flex-wrap: wrap; gap: 14px; }
+  .mosaic { flex: 1 1 400px; min-width: 0; gap: 16px; }
+  @media (max-width: 600px) { .mosaic { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+</style>

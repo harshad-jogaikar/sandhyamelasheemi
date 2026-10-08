@@ -1,0 +1,68 @@
+---
+/**
+ * Progressive enquiry form.
+ * - With `site.forms.endpoint` set (e.g. a Formspree/Basin/Web3Forms URL) it posts there via fetch and shows inline success.
+ * - Without an endpoint it falls back to opening the visitor's mail client with the fields pre-filled.
+ */
+import site from '@/data/site.json';
+import { mailtoUrl } from '@/lib/format';
+
+interface Field {
+  name: string;
+  label: string;
+  type?: 'text' | 'email' | 'tel' | 'select' | 'textarea';
+  placeholder?: string;
+  options?: string[];
+  required?: boolean;
+  half?: boolean;
+}
+interface Props {
+  title: string;
+  subject: string;
+  fields: Field[];
+  submitLabel?: string;
+  dark?: boolean;
+  id?: string;
+}
+const { title, subject, fields, submitLabel = 'Send enquiry', dark = false, id = 'enquiry' } = Astro.props;
+const endpoint = site.forms.endpoint;
+const fallback = mailtoUrl(site.contact.email, subject);
+---
+<form class={`enquiry stack ${dark ? 'on-dark' : ''}`} id={id} method="post" action={endpoint || fallback} data-endpoint={endpoint} data-subject={subject} novalidate>
+  <h3 class="display display-sm">{title}</h3>
+  <input type="hidden" name="_subject" value={subject} />
+  <input type="text" name="_gotcha" class="visually-hidden" tabindex="-1" autocomplete="off" aria-hidden="true" />
+  <div class="fields">
+    {fields.map((f) => (
+      <label class={`field ${f.half ? 'half' : ''}`}>
+        <span class="field-label">{f.label}{f.required && <span aria-hidden="true"> *</span>}</span>
+        {f.type === 'select' ? (
+          <select name={f.name} required={f.required}>
+            {(f.options ?? []).map((o) => <option>{o}</option>)}
+          </select>
+        ) : f.type === 'textarea' ? (
+          <textarea name={f.name} placeholder={f.placeholder} required={f.required}></textarea>
+        ) : (
+          <input type={f.type ?? 'text'} name={f.name} placeholder={f.placeholder} required={f.required} autocomplete={f.type === 'email' ? 'email' : f.type === 'tel' ? 'tel' : undefined} />
+        )}
+      </label>
+    ))}
+  </div>
+  <p class="form-error" data-error hidden></p>
+  <button type="submit" class={`btn ${dark ? 'btn-gold' : 'btn-ink'}`}>{submitLabel}</button>
+  <p class="form-note">Replies within {site.contact.replyTime}. Or email <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a> directly.</p>
+  <p class="form-success" data-success hidden>Thank you. Your enquiry has been sent and Sandhya will be in touch within {site.contact.replyTime}.</p>
+</form>
+
+<style>
+  .enquiry { background: var(--white); color: var(--text); border-radius: 12px; padding: 32px; gap: 18px; border: 1px solid var(--line); }
+  .fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .field { grid-column: span 2; }
+  .field.half { grid-column: span 1; }
+  @media (max-width: 560px) { .field.half { grid-column: span 2; } }
+</style>
+
+<script>
+  import { setupEnquiryForms } from '@/lib/enquiry-form';
+  setupEnquiryForms();
+</script>

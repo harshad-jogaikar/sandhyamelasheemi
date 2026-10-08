@@ -1,0 +1,56 @@
+---
+import Base from '@/layouts/Base.astro';
+import Photo from '@/components/Photo.astro';
+import gallery from '@/data/gallery.json';
+---
+<Base title="Gallery" path="/gallery" description="Photos and video of Sandhya Melasheemi on court, on the podium and coaching in Goa.">
+  <section class="wrap section stack">
+    <div class="stack head">
+      <p class="eyebrow muted">Gallery</p>
+      <h1 class="display display-lg">On court, on the podium, at home in Goa</h1>
+      <p class="lede muted">High-resolution images are available to press and partners on request.</p>
+    </div>
+
+    <div class="masonry">
+      {gallery.photos.map((p) => (
+        <figure class="item">
+          <Photo src={p.src} alt={p.alt} note={p.note} ratio={p.ratio} />
+          <figcaption class="muted">{p.caption}</figcaption>
+        </figure>
+      ))}
+    </div>
+  </section>
+
+  <section class="band-dark">
+    <div class="wrap section stack video">
+      <div class="stack head">
+        <p class="eyebrow eyebrow-gold">Video</p>
+        <h2 class="display display-md">Watch</h2>
+      </div>
+      <div class="grid grid-2">
+        {gallery.videos.map((v) => (
+          <div class="stack vid">
+            {v.embedUrl ? (
+              <iframe src={v.embedUrl} title={v.title} loading="lazy" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+            ) : (
+              <Photo alt={v.title} note={`[VIDEO — ${v.title}]`} ratio="16 / 9" dark />
+            )}
+            <span class="muted">{v.title}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .head { gap: 12px; }
+  .masonry { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; margin-top: 24px; }
+  .item { margin: 0; display: flex; flex-direction: column; gap: 8px; }
+  .item figcaption { font-size: 14px; }
+  .video { gap: 32px; }
+  .vid { gap: 10px; }
+  iframe { width: 100%; aspect-ratio: 16 / 9; border: 0; border-radius: var(--radius); }
+  @media (max-width: 900px) { .masonry { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 560px) { .masonry { grid-template-columns: minmax(0, 1fr); } }
+</style>

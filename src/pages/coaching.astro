@@ -1,0 +1,114 @@
+---
+import Base from '@/layouts/Base.astro';
+import Photo from '@/components/Photo.astro';
+import EnquiryForm from '@/components/EnquiryForm.astro';
+import site from '@/data/site.json';
+import programmes from '@/data/programmes.json';
+
+const credentials = [
+  ...site.credentials.slice(0, 3),
+  '[Coaching qualifications / BAI or BWF certification, if any]',
+  '[Years coaching, notable students, clubs or academies]',
+];
+const testimonials = [
+  { quote: '[Testimonial from a parent or student — two sentences on what changed in their game.]', who: '[Name], [role / club]' },
+  { quote: '[Testimonial from an academy head or Masters player.]', who: '[Name], [role / club]' },
+];
+---
+<Base title="Coaching & Clinics" path="/coaching" description="Badminton coaching with Sandhya Melasheemi: private and group sessions for juniors, adults and Masters players in Goa, plus guest camps and corporate clinics across India.">
+  <section class="wrap section hero">
+    <div class="stack copy">
+      <p class="eyebrow muted">Coaching &amp; clinics</p>
+      <h1 class="display display-lg">Train with a national champion</h1>
+      <p class="lede muted">
+        Technique, footwork and match craft from a player who still competes and wins. Sessions for juniors, adults and Masters players in Goa, plus guest coaching for academies, schools and clubs anywhere in India.
+      </p>
+      <div class="ctas">
+        <a href="#enquire" class="btn btn-gold">Enquire about coaching</a>
+        <a href="/partner#packages" class="btn btn-ink">Book a corporate clinic</a>
+      </div>
+    </div>
+    <Photo alt="Sandhya correcting a player's grip" note="[PHOTO — Sandhya correcting a player's grip, court-side]" ratio="4 / 3" class="hero-photo" loading="eager" />
+  </section>
+
+  <section class="band-dark">
+    <div class="wrap section stack programmes">
+      <div class="stack head">
+        <p class="eyebrow eyebrow-gold">Programmes</p>
+        <h2 class="display display-md">Four ways to work together</h2>
+      </div>
+      <div class="grid grid-4">
+        {programmes.map((p) => (
+          <div class="card-dark prog stack" id={p.id}>
+            <span class="eyebrow eyebrow-gold">{p.eyebrow}</span>
+            <h3 class="display display-sm">{p.title}</h3>
+            <p class="muted">{p.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap section why">
+    <div class="stack copy">
+      <p class="eyebrow muted">Why train with Sandhya</p>
+      <h2 class="display display-md">Credentials</h2>
+      <ul class="creds">
+        {credentials.map((c) => <li class={c.startsWith('[') ? 'unconfirmed' : ''}>{c}</li>)}
+      </ul>
+    </div>
+    <div class="stack quotes">
+      {testimonials.map((t) => (
+        <blockquote class="card quote stack">
+          <p>“{t.quote}”</p>
+          <footer class="muted">— {t.who}</footer>
+        </blockquote>
+      ))}
+    </div>
+  </section>
+
+  <section class="band-paper-2" id="enquire">
+    <div class="wrap section enquire">
+      <div class="stack copy">
+        <h2 class="display display-md">Enquire about coaching</h2>
+        <p class="muted">Tell us who the coaching is for and where you are. Sandhya replies personally within {site.contact.replyTime}.</p>
+        <p class="muted small">Based in [town], Goa · Travels across India for camps</p>
+      </div>
+      <EnquiryForm
+        id="coaching-enquiry"
+        title="Coaching enquiry"
+        subject="Coaching enquiry"
+        fields={[
+          { name: 'name', label: 'Your name', required: true, half: true },
+          { name: 'email', label: 'Email', type: 'email', required: true, half: true },
+          { name: 'phone', label: 'Phone (optional)', type: 'tel', half: true },
+          { name: 'location', label: 'Location', placeholder: 'City / town', half: true },
+          { name: 'coaching_for', label: 'Coaching for', type: 'select', options: programmes.map((p) => p.formOption) },
+          { name: 'message', label: 'Anything else', type: 'textarea', placeholder: 'Current level, goals, preferred days' },
+        ]}
+      />
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero { display: flex; flex-wrap: wrap; gap: 48px; align-items: center; }
+  .copy { flex: 1 1 440px; min-width: 0; gap: 20px; }
+  .ctas { display: flex; flex-wrap: wrap; gap: 14px; }
+  .hero :global(.hero-photo) { flex: 1 1 400px; min-width: 0; border-radius: 12px; }
+  .programmes { gap: 36px; }
+  .head { gap: 10px; }
+  .prog { padding: 26px; gap: 12px; }
+  .prog p { font-size: 14px; }
+  .why { display: flex; flex-wrap: wrap; gap: 48px; }
+  .why .copy { gap: 18px; }
+  .creds { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 10px; font-size: 16px; }
+  .quotes { flex: 1 1 440px; min-width: 0; gap: 16px; }
+  .quote { margin: 0; padding: 24px; gap: 10px; }
+  .quote p { font-size: 17px; font-style: italic; }
+  .quote footer { font-size: 14px; }
+  .enquire { display: flex; flex-wrap: wrap; gap: 48px; align-items: flex-start; }
+  .enquire .copy { flex: 1 1 360px; gap: 14px; }
+  .enquire :global(.enquiry) { flex: 1 1 460px; min-width: 0; }
+  .small { font-size: 15px; }
+</style>

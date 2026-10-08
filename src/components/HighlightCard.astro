@@ -1,0 +1,22 @@
+---
+import Photo from './Photo.astro';
+import { LEVEL_LABELS, describeHonour, displayYear, type Honour } from '@/lib/honours';
+
+interface Props { honour: Honour; photoNote?: string; src?: string }
+const { honour, photoNote, src } = Astro.props;
+const title = `${honour.result}, ${honour.event}`;
+---
+<article class="card stack hl">
+  <Photo src={src} alt={`${honour.result} at the ${honour.event}`} note={photoNote ?? `[PHOTO — ${honour.event}]`} ratio="4 / 3" class="hl-photo" />
+  <div class="body stack">
+    <span class="eyebrow eyebrow-gold-text">{LEVEL_LABELS[honour.level]} · {displayYear(honour)}</span>
+    <h3 class="display display-sm">{title}</h3>
+    <p class="muted">{honour.category}{honour.venue ? `, ${honour.venue}` : ''}. {describeHonour(honour)}.</p>
+  </div>
+</article>
+
+<style>
+  .hl :global(.hl-photo) { border-radius: 0; }
+  .body { padding: 24px; gap: 10px; }
+  .body p { font-size: 15px; }
+</style>
