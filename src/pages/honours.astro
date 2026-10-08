@@ -3,13 +3,13 @@ import Base from '@/layouts/Base.astro';
 import site from '@/data/site.json';
 import honoursData from '@/data/honours.json';
 import { assertValidHonours } from '@/lib/validate';
-import { HONOUR_LEVELS, LEVEL_LABELS, describeHonour, displayYear, sortHonours, summarise } from '@/lib/honours';
+import { HONOUR_LEVELS, LEVEL_LABELS, describeHonour, displayYear, medalCount, sortHonours } from '@/lib/honours';
 
 const honours = sortHonours(assertValidHonours(honoursData));
-const summary = summarise(honours);
+const nationalTitles = site.stats.find((s) => s.key === 'nationalTitles')?.value ?? '—';
 const tiles = [
-  { value: String(summary.bronze), label: 'World bronze' },
-  { value: site.stats[1].value, label: 'National Masters titles' },
+  { value: String(medalCount(honours, { level: 'world', medal: 'bronze' })), label: 'World bronze' },
+  { value: nationalTitles, label: 'National Masters titles' },
   { value: '[N]', label: 'State titles' },
 ];
 ---
@@ -49,7 +49,7 @@ const tiles = [
         <tbody>
           {honours.map((h) => (
             <tr data-level={h.level} class={h.medal === 'bronze' ? 'row-bronze' : ''}>
-              <td><strong class={h.confirmed ? '' : 'unconfirmed'}>{displayYear(h)}</strong></td>
+              <td><strong class={h.confirmed ? '' : 'unconfirmed'}>{displayYear(h)}</strong>{!h.confirmed && <span class="visually-hidden"> (to be confirmed)</span>}</td>
               <td>{h.event}{h.venue ? `, ${h.venue}` : ''}</td>
               <td>{h.category}</td>
               <td>

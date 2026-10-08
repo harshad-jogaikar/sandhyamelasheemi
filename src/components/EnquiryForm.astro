@@ -23,13 +23,16 @@ interface Props {
   submitLabel?: string;
   dark?: boolean;
   id?: string;
+  /** Heading level for the form title; use 'h2' when the form is the page's main section. */
+  headingLevel?: 'h2' | 'h3';
 }
-const { title, subject, fields, submitLabel = 'Send enquiry', dark = false, id = 'enquiry' } = Astro.props;
+const { title, subject, fields, submitLabel = 'Send enquiry', dark = false, id = 'enquiry', headingLevel = 'h3' } = Astro.props;
+const Heading = headingLevel;
 const endpoint = site.forms.endpoint;
 const fallback = mailtoUrl(site.contact.email, subject);
 ---
 <form class={`enquiry stack ${dark ? 'on-dark' : ''}`} id={id} method="post" action={endpoint || fallback} data-endpoint={endpoint} data-subject={subject} novalidate>
-  <h3 class="display display-sm">{title}</h3>
+  <Heading class="display display-sm">{title}</Heading>
   <input type="hidden" name="_subject" value={subject} />
   <input type="text" name="_gotcha" class="visually-hidden" tabindex="-1" autocomplete="off" aria-hidden="true" />
   <div class="fields">
@@ -48,10 +51,11 @@ const fallback = mailtoUrl(site.contact.email, subject);
       </label>
     ))}
   </div>
-  <p class="form-error" data-error hidden></p>
+  <p class="form-error" id={`${id}-error`} data-error role="alert" hidden></p>
   <button type="submit" class={`btn ${dark ? 'btn-gold' : 'btn-ink'}`}>{submitLabel}</button>
   <p class="form-note">Replies within {site.contact.replyTime}. Or email <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a> directly.</p>
-  <p class="form-success" data-success hidden>Thank you. Your enquiry has been sent and Sandhya will be in touch within {site.contact.replyTime}.</p>
+  <p class="form-success" data-success role="status" hidden>Thank you. Your enquiry has been sent and Sandhya will be in touch within {site.contact.replyTime}.</p>
+  <p class="form-success" data-mailto-note role="status" hidden>Your mail app should now open with the message filled in. If nothing happened, email <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a> directly.</p>
 </form>
 
 <style>

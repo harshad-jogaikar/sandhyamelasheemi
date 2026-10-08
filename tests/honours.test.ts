@@ -4,6 +4,7 @@ import {
   displayYear,
   filterByLevel,
   highlights,
+  medalCount,
   sortHonours,
   summarise,
   type Honour,
@@ -80,6 +81,18 @@ describe('summarise', () => {
 
   test('returns zeros for an empty list', () => {
     expect(summarise([])).toEqual({ world: 0, national: 0, state: 0, gold: 0, bronze: 0, unconfirmed: 0 });
+  });
+});
+
+describe('medalCount', () => {
+  const input = [make({ level: 'world', medal: 'bronze' }), make({ level: 'national', medal: 'bronze' }), make({ level: 'national', medal: 'gold' })];
+  test('counts by level and medal together', () => {
+    expect(medalCount(input, { level: 'world', medal: 'bronze' })).toBe(1);
+  });
+  test('counts by medal alone or level alone', () => {
+    expect(medalCount(input, { medal: 'bronze' })).toBe(2);
+    expect(medalCount(input, { level: 'national' })).toBe(2);
+    expect(medalCount(input, {})).toBe(3);
   });
 });
 

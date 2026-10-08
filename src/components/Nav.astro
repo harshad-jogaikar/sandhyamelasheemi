@@ -60,11 +60,20 @@ const isActive = (href: string) => path === href || path.startsWith(`${href}/`);
   const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
   const menu = document.querySelector<HTMLElement>('[data-menu]');
   if (toggle && menu) {
-    toggle.addEventListener('click', () => {
-      const open = toggle.getAttribute('aria-expanded') === 'true';
-      toggle.setAttribute('aria-expanded', String(!open));
-      if (open) menu.removeAttribute('data-open');
-      else menu.setAttribute('data-open', '');
+    const setOpen = (open: boolean) => {
+      toggle.setAttribute('aria-expanded', String(open));
+      if (open) menu.setAttribute('data-open', '');
+      else menu.removeAttribute('data-open');
+    };
+    toggle.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+    menu.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+    document.addEventListener('click', (e) => {
+      if (toggle.getAttribute('aria-expanded') === 'true' && !menu.contains(e.target as Node) && !toggle.contains(e.target as Node)) setOpen(false);
     });
   }
 </script>

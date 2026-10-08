@@ -10,9 +10,10 @@ function mountForm(endpoint: string): HTMLFormElement {
       <input name="name" required />
       <input name="email" type="email" required />
       <textarea name="message"></textarea>
-      <p data-error hidden></p>
+      <p data-error id="f-error" hidden></p>
       <button type="submit">Send</button>
       <p data-success hidden></p>
+      <p data-mailto-note hidden></p>
     </form>`;
   const form = document.querySelector<HTMLFormElement>('form.enquiry')!;
   setupEnquiryForms();
@@ -52,7 +53,20 @@ describe('setupEnquiryForms', () => {
     expect(error.hidden).toBe(false);
     expect(error.textContent).toContain('Name is required');
     expect(document.activeElement).toBe(form.querySelector('[name="name"]'));
+    expect(form.querySelector('[name="name"]')!.getAttribute('aria-invalid')).toBe('true');
+    expect(form.querySelector('[name="name"]')!.getAttribute('aria-describedby')).toBe('f-error');
+    expect(form.querySelector('[name="message"]')!.hasAttribute('aria-invalid')).toBe(false);
     expect(fetchSpy).not.toHaveBeenCalled();
+  });
+
+  test('clears aria-invalid once the field is fixed', async () => {
+    const form = mountForm('https://forms.example/submit');
+    vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response('{}', { status: 200 }));
+    await submit(form);
+    expect(form.querySelector('[name="email"]')!.getAttribute('aria-invalid')).toBe('true');
+    fill(form, { name: 'S', email: 's@example.com' });
+    await submit(form);
+    expect(form.querySelector('[name="email"]')!.hasAttribute('aria-invalid')).toBe(false);
   });
 
   test('posts JSON to the endpoint and shows success', async () => {
@@ -100,5 +114,6 @@ describe('setupEnquiryForms', () => {
     expect(assigned).toHaveLength(1);
     expect(assigned[0]).toMatch(/^mailto:hello@example\.com\?subject=Test%20enquiry&body=/);
     expect(decodeURIComponent(assigned[0])).toContain('Message: Hi there');
+    expect(form.querySelector<HTMLElement>('[data-mailto-note]')!.hidden).toBe(false);
   });
 });

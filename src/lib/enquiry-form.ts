@@ -52,11 +52,29 @@ async function postToEndpoint(endpoint: string, values: Record<string, string>):
   if (!res.ok) throw new Error(`Form endpoint responded ${res.status}`);
 }
 
+export function mailtoHref(action: string, subject: string, values: Record<string, string>): string {
+  return `${action.split('?')[0]}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(buildMailBody(values))}`;
+}
+
 function openMailClient(form: HTMLFormElement, values: Record<string, string>): void {
   const subject = form.dataset.subject ?? 'Website enquiry';
-  const base = form.getAttribute('action') ?? '';
-  const url = `${base.split('?')[0]}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(buildMailBody(values))}`;
-  window.location.href = url;
+  window.location.href = mailtoHref(form.getAttribute('action') ?? '', subject, values);
+  show(form.querySelector<HTMLElement>('[data-mailto-note]'));
+}
+
+function markInvalid(form: HTMLFormElement, errors: readonly FieldError[]): void {
+  const errorId = form.querySelector<HTMLElement>('[data-error]')?.id;
+  const bad = new Set(errors.map((e) => e.name));
+  form.querySelectorAll<HTMLElement>('[name]').forEach((el) => {
+    const name = el.getAttribute('name') ?? '';
+    if (bad.has(name)) {
+      el.setAttribute('aria-invalid', 'true');
+      if (errorId) el.setAttribute('aria-describedby', errorId);
+    } else {
+      el.removeAttribute('aria-invalid');
+      el.removeAttribute('aria-describedby');
+    }
+  });
 }
 
 export function setupEnquiryForms(root: ParentNode = document): void {
@@ -67,10 +85,12 @@ export function setupEnquiryForms(root: ParentNode = document): void {
       const successEl = form.querySelector<HTMLElement>('[data-success]');
       const button = form.querySelector<HTMLButtonElement>('button[type=submit]');
       if (errorEl) errorEl.hidden = true;
+      form.querySelector<HTMLElement>('[data-mailto-note]')?.setAttribute('hidden', '');
 
       const values = formValues(form);
       if (values._gotcha) return; // honeypot tripped: silently ignore bots
       const errors = validateValues(values, requiredNames(form));
+      markInvalid(form, errors);
       if (errors.length > 0) {
         show(errorEl, errors.map((e) => e.message).join('. '));
         form.querySelector<HTMLElement>(`[name="${errors[0].name}"]`)?.focus();

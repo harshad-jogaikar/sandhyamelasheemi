@@ -72,6 +72,11 @@ export function summarise(honours: readonly Honour[]): HonourSummary {
   );
 }
 
+/** Count honours matching a level and/or medal. */
+export function medalCount(honours: readonly Honour[], filter: { level?: HonourLevel; medal?: Medal }): number {
+  return honours.filter((h) => (filter.level ? h.level === filter.level : true) && (filter.medal ? h.medal === filter.medal : true)).length;
+}
+
 /** "w/ Partner · detail" with whichever parts exist. */
 export function describeHonour(h: Honour): string {
   const parts = [h.partner ? `w/ ${h.partner}` : null, h.detail].filter(Boolean);

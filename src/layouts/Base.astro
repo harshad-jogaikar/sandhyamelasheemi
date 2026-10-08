@@ -52,7 +52,7 @@ const personSchema = {
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800&family=Public+Sans:wght@400;500;600&display=swap"
     />
-    <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(personSchema).replace(/</g, '\\u003c')} />
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
